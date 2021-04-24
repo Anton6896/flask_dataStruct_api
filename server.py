@@ -47,7 +47,7 @@ class BlogPost(db.Model):
 
 # =================================  all routes ==========================
 
-@app.route('/')
+@app.route('/', methods=['get'])
 def hello_world():
     return start_func()
 
@@ -55,7 +55,17 @@ def hello_world():
 # ===============================  user =================================
 @app.route("/user_create", methods=["POST"])
 def user_crete():
-    ...
+    data = request.get_json()
+    new_user = User(
+        name=data["name"],
+        email=data["email"],
+        address=data["address"],
+        phone=data["phone"],
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({"message": "User created"}), 200
 
 
 @app.route("/user/descending_id", methods=["GET"])
