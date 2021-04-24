@@ -4,7 +4,9 @@ from datetime import datetime
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from flask_sqlalchemy import SQLAlchemy
-from utils import *
+from utils import (
+    start_page, linked_list
+)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlitedb.file"
@@ -49,7 +51,7 @@ class BlogPost(db.Model):
 
 @app.route('/', methods=['get'])
 def hello_world():
-    return start_func()
+    return start_page.start_func()
 
 
 # ===============================  user =================================
@@ -70,11 +72,28 @@ def user_crete():
 
 @app.route("/user/descending_id", methods=["GET"])
 def user_get_descending_id():
-    ...
+    users_query = User.query.all()  # return ascending order
+    users_ll = linked_list.LinkedList()
+
+    for user in users_query:
+        users_ll.insert_beginning(
+            linked_list.Node(
+                {
+                    "id": user.id,
+                    "name": user.name,
+                    "email": user.email,
+                    "address": user.address,
+                    "phone": user.phone,
+                }
+            )
+        )
+
+    return jsonify(users_ll.to_list()), 200
 
 
 @app.route("/user/ascending_id", methods=["GET"])
 def user_get_ascending_id():
+    # same just push to end of the list  --> insert_to_end
     ...
 
 
