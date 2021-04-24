@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from flask_sqlalchemy import SQLAlchemy
-from . import my_routes
+from utils import *
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlitedb.file"
@@ -44,4 +44,65 @@ class BlogPost(db.Model):
     date = db.Column(db.Date)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
-# all routes was transferred to my_routes file
+
+# =================================  all routes ==========================
+
+@app.route('/')
+def hello_world():
+    return start_func()
+
+
+# ===============================  user =================================
+@app.route("/user_create", methods=["POST"])
+def user_crete():
+    ...
+
+
+@app.route("/user/descending_id", methods=["GET"])
+def user_get_descending_id():
+    ...
+
+
+@app.route("/user/ascending_id", methods=["GET"])
+def user_get_ascending_id():
+    ...
+
+
+@app.route("/user/<user_id>", methods=["GET"])
+def user_get_by_id(user_id: int):
+    ...
+
+
+@app.route("/user/<user_id>", methods=["DELETE"])
+def user_delete_by_id(user_id: int):
+    ...
+
+
+@app.route("/user/<user_id>", methods=["UPDATE"])
+def user_update_by_id(user_id: int):
+    ...
+
+
+# =============================  blog ==================================
+@app.route("/blog_post/<user_id>", methods=["POST"])
+def blog_post_create(user_id: int):
+    ...
+
+
+@app.route("/blog_post/<user_id>", methods=["GET"])
+def blog_post_get_all_by_user_id(user_id: int):
+    ...
+
+
+@app.route("/blog_post/<blog_post_id>", methods=["GET"])
+def blog_post_get_one_by_id(blog_post_id: int):
+    ...
+
+
+@app.route("/blog_post/<blog_post_id>", methods=["DELETE"])
+def blog_post_delete_one_by_id(blog_post_id: int):
+    ...
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
