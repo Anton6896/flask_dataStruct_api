@@ -1,3 +1,5 @@
+import sqlite3
+
 from flask import Flask, request, jsonify
 from sqlite3 import Connection as SQLite3Connection
 from datetime import datetime
@@ -137,10 +139,40 @@ def user_get_by_id(user_id: int):
 
 @app.route("/user/<user_id>", methods=["DELETE"])
 def user_delete_by_id(user_id: int):
-    ...
+    # users_query = User.query.all()
+    # users_ll = linked_list.LinkedList()
+    #
+    # for user in users_query:
+    #     users_ll.insert_beginning(
+    #         linked_list.Node(
+    #             {
+    #                 "id": user.id,
+    #                 "name": user.name,
+    #                 "email": user.email,
+    #                 "address": user.address,
+    #                 "phone": user.phone,
+    #             }
+    #         )
+    #     )
+    #
+    # # take out from ll
+    # users_ll.delete(user_id)
+    #
+    # # delete from db
+    # conn = sqlite3.connect('sqlitedb.file')
+    # sql = 'DELETE FROM user WHERE id=?'
+    # cur = conn.cursor()
+    # cur.execute(sql, (user_id,))
+    # conn.commit()
+
+    user = User.query.filter_by(id=user_id).first()
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": "user deleted"}), 200
 
 
-@app.route("/user/<user_id>", methods=["UPDATE"])
+@app.route("/user/<user_id>", methods=["PUT"])
 def user_update_by_id(user_id: int):
     ...
 

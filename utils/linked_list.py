@@ -49,10 +49,21 @@ class LinkedList:
     def find(self, data) -> bool:
         pass
 
-    def delete(self, data):
-        pass
+    def delete(self, user_id) -> bool:
+        node = prev = self.head
+        if self.head.data["id"] is int(user_id):
+            self.head = node.next_node
+            return True
 
+        while node:
+            if node.data["id"] is int(user_id):
+                prev.next_node = node.next_node  # take out current node
+                return True
 
+            prev = node  # order is important !!!
+            node = node.next_node
+
+        return False
 
     def print(self):
         if self.head is None:
