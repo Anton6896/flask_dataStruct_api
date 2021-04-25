@@ -113,10 +113,26 @@ def user_get_ascending_id():
     return jsonify(users_ll.to_list()), 200
 
 
-
 @app.route("/user/<user_id>", methods=["GET"])
 def user_get_by_id(user_id: int):
-    ...
+    users_query = User.query.all()
+    users_ll = linked_list.LinkedList()
+
+    for user in users_query:
+        users_ll.insert_beginning(
+            linked_list.Node(
+                {
+                    "id": user.id,
+                    "name": user.name,
+                    "email": user.email,
+                    "address": user.address,
+                    "phone": user.phone,
+                }
+            )
+        )
+
+    user = users_ll.get_user_by_id(user_id)
+    return jsonify(user), 200
 
 
 @app.route("/user/<user_id>", methods=["DELETE"])
