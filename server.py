@@ -94,7 +94,24 @@ def user_get_descending_id():
 @app.route("/user/ascending_id", methods=["GET"])
 def user_get_ascending_id():
     # same just push to end of the list  --> insert_to_end
-    ...
+    users_query = User.query.all()  # return ascending order
+    users_ll = linked_list.LinkedList()
+
+    for user in users_query:
+        users_ll.insert_to_end(
+            linked_list.Node(
+                {
+                    "id": user.id,
+                    "name": user.name,
+                    "email": user.email,
+                    "address": user.address,
+                    "phone": user.phone,
+                }
+            )
+        )
+
+    return jsonify(users_ll.to_list()), 200
+
 
 
 @app.route("/user/<user_id>", methods=["GET"])
