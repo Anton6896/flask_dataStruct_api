@@ -1,3 +1,4 @@
+import random
 import sqlite3
 
 from flask import Flask, request, jsonify
@@ -7,7 +8,7 @@ from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from flask_sqlalchemy import SQLAlchemy
 from utils import (
-    start_page, linked_list, hashing
+    start_page, linked_list, hashing, bst
 )
 
 app = Flask(__name__)
@@ -207,14 +208,32 @@ def blog_post_create(user_id: int):
     return jsonify({"message": "post is created"}), 200
 
 
-@app.route("/blog_post/<user_id>", methods=["GET"])
-def blog_post_get_all_by_user_id(user_id: int):
-    ...
+@app.route("/blog_post/<post_id>", methods=["GET"])
+def blog_post_by_id(post_id: int):
+    posts = BlogPost.query.all()
+    random.shuffle(posts)  # trying to avoid LL in BST
+    b_tree = bst.BST()
 
+    for p in posts:
+        b_tree.insert(
+            {
+                "id": p.id,
+                "title": p.title,
+                "body": p.body,
+                "date": p.date,
+                "user_id": p.user_id
+            }
+        )
 
-@app.route("/blog_post/<blog_post_id>", methods=["GET"])
-def blog_post_get_one_by_id(blog_post_id: int):
-    ...
+    post = b_tree.search(post_id)
+
+    if not post:
+        return jsonify({"message": "no found id in posts"}), 400
+
+    return jsonify({
+        "message": "bst created",
+        "post_title": post['title']
+    }), 200
 
 
 @app.route("/blog_post/<blog_post_id>", methods=["DELETE"])

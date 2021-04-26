@@ -1,6 +1,5 @@
 """
 tree will be in use by the server.BlogPost().id for as comparison obj
-
 for test porpoise only, for practice and remember how to !!
 """
 
@@ -50,7 +49,7 @@ class BST:
     def print(self):
         return self._print_inorder(self.root)
 
-    def search(self, blog_id) -> bool:
+    def search(self, blog_id) -> dict or bool:
         blog_id = int(blog_id)
 
         if not self.root:
