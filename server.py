@@ -7,7 +7,7 @@ from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from flask_sqlalchemy import SQLAlchemy
 from utils import (
-    start_page, linked_list
+    start_page, linked_list, hashing
 )
 
 app = Flask(__name__)
@@ -180,7 +180,28 @@ def user_update_by_id(user_id: int):
 # =============================  blog ==================================
 @app.route("/blog_post/<user_id>", methods=["POST"])
 def blog_post_create(user_id: int):
-    ...
+    user = User.query.filter_by(id=user_id).first()
+    if not user:
+        return jsonify({"message": "user does not exists"}), 400
+    data = request.get_json()
+
+    # add all data to hash table
+    ht = hashing.HashTable(30)
+    ht.add_key_value("title", data["title"])
+    ht.add_key_value("body", data["body"])
+    ht.add_key_value("date", now)
+    ht.add_key_value("user_id", user_id)
+
+    new_post = BlogPost(
+        title=data["title"],
+        body=data["body"],
+        date=now,
+        user_id=user_id
+    )
+
+    db.session.add(new_post)
+    db.session.commit()
+    return jsonify({"message": "post is created"}), 200
 
 
 @app.route("/blog_post/<user_id>", methods=["GET"])

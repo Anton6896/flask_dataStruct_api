@@ -68,3 +68,4 @@ if __name__ == '__main__':
     hs.add_key_value("bb", "bb")
     hs.add_key_value('7', '4')
     hs.print()
+    print(f"get value 7 : {hs.get_value('7')}")
