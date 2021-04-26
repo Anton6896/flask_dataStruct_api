@@ -1,5 +1,7 @@
 """
 tree will be in use by the server.BlogPost().id for as comparison obj
+
+for test porpoise only, for practice and remember how to !!
 """
 
 
@@ -48,8 +50,29 @@ class BST:
     def print(self):
         return self._print_inorder(self.root)
 
+    def search(self, blog_id):
+        blog_id = int(blog_id)
+
+        if not self.root:
+            return None
+        return self._search(blog_id, self.root)
+
+    def _search(self, id, node: Node) -> bool:
+        if id == node.data["id"]:
+            return node.data
+
+        if id < node.data["id"] and node.left:
+            return self._search(id, node.left)
+
+        if id > node.data["id"] and node.right:
+            return self._search(id, node.right)
+
+        return False
+
 
 if __name__ == '__main__':
     bs = BST()
     bs.insert({"id": 1}).insert({"id": 10}).insert({"id": 4})
     bs.print()
+    print()
+    print(bs.search(10))
