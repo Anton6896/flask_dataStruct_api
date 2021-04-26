@@ -50,11 +50,12 @@ class BST:
     def print(self):
         return self._print_inorder(self.root)
 
-    def search(self, blog_id):
+    def search(self, blog_id) -> bool:
         blog_id = int(blog_id)
 
         if not self.root:
-            return None
+            return False
+
         return self._search(blog_id, self.root)
 
     def _search(self, id, node: Node) -> bool:
