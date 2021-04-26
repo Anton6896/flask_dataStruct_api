@@ -48,6 +48,9 @@ class BlogPost(db.Model):
     date = db.Column(db.Date)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
+    def __str__(self):
+        return f"id:{self.id} , title:{self.title}"
+
 
 # =================================  all routes ==========================
 
